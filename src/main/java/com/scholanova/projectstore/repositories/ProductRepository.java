@@ -46,9 +46,9 @@ public class ProductRepository {
 
 		String query = "INSERT INTO PRODUCT (NAME,TYPE,PRICE,IDSTORE) VALUES (:name, :type, :price, :idstore) ";
 		//query = "INSERT INTO PRODUCT (NAME,TYPE,PRICE,IDSTORE) VALUES ('poire', 'fruit',60,2) ";
-		query = "INSERT INTO STORES " +
+		/*query = "INSERT INTO STORES " +
 				"(NAME) VALUES " +
-				"(:name)";
+				"(:name)";*/
 		SqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("name", product.getName()+product.getType()+product.getPrice()+product.getidStore()).addValue("type", product.getType()).addValue("price", product.getPrice()).addValue("idstore", product.getidStore());
 

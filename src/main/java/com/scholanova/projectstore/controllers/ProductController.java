@@ -23,9 +23,9 @@ public class ProductController {
 	}
 	
     @PostMapping(path = "/stores/{store_id}/stocks")
-    public ResponseEntity<?> createProduct(@RequestBody Product product, @PathVariable("store_id") Integer store_id) throws Exception {
+    public ResponseEntity<?> createProduct(@RequestBody Product product, @PathVariable("store_id") Integer storeid) throws Exception {
     	try {
-    		product.setId(2);
+    		product.setIdStore(storeid);
     		Product newProduct = ps.create(product);
     		return ResponseEntity.status(HttpStatus.OK).body(newProduct);
     	} catch (Exception e) {
