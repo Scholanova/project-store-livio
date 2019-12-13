@@ -1,5 +1,5 @@
 package com.scholanova.projectstore.exceptions;
 
-public class ProductQuantityIsLowerThan1Exception {
+public class ProductQuantityIsLowerThan1Exception extends Exception {
 
 }

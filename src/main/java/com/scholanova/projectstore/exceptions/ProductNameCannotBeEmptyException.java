@@ -1,5 +1,5 @@
 package com.scholanova.projectstore.exceptions;
 
-public class ProductNameCannotBeEmptyException {
+public class ProductNameCannotBeEmptyException extends Exception {
 
 }

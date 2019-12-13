@@ -3,16 +3,18 @@ package com.scholanova.projectstore.models;
 public class Product {
     private Integer id;
     private String name;
-    private Integer quantity;
+    private String type;
+    private Integer price;
     private Integer idStore;
     
     public Product() {
     }
 
-    public Product(Integer id, String name,Integer quantity,Integer idStore) {
+    public Product(Integer id, String name,String type,Integer price,Integer idStore) {
         this.id = id;
         this.name = name;
-        this.quantity = quantity;
+        this.type = type;
+        this.price = price;
         this.idStore = idStore;
     }
 
@@ -32,12 +34,12 @@ public class Product {
         this.name = name;
     }
     
-    public Integer getQuantity() {
-    	return this.quantity;
+    public Integer getPrice() {
+    	return this.price;
     }
     
-    public void setQuantity(int quantity) {
-    	this.quantity = quantity;
+    public void setPrice(int price) {
+    	this.price = price;
     }
     public Integer getidStore() {
     	return this.idStore;
