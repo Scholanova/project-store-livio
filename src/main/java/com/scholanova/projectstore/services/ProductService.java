@@ -67,4 +67,24 @@ public class ProductService {
     private boolean isProductInStore(Product p,Integer storeId) {
     	return p.getidStore() == storeId;
     }
+
+	public Product updateProduct(Product product) throws ProductNotFoundException, ProductNotInStoreException, ProductNameCannotBeEmptyException, ProductTypeNotValidException, ProductPriceNotValidException {
+		
+		//supposément lance product not in store si produit pas dans le store
+		
+        if (isNameMissing(product)) {
+            throw new ProductNameCannotBeEmptyException();
+        }
+        if(isPriceNotValid(product)) {
+        	throw new ProductPriceNotValidException();
+        }
+		Product p = getProduct(product.getId(),product.getidStore());
+		
+		int rows = productRepository.update(product);
+		if ( rows >  0 ) {
+			return productRepository.getById(product.getId()); 
+		} else {
+			return null;
+		}
+	}
 }

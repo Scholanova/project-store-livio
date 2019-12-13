@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,5 +49,18 @@ public class ProductController {
         	return ResponseEntity.badRequest().body(returnBody);
 		}
     }
-	
+    
+    @PutMapping(path="/stores/{store_id}/stocks/{id}")
+	public ResponseEntity<?> putProduct(@RequestBody Product product,@PathVariable("id") Integer id,@PathVariable("store_id") Integer idstore) throws Exception {
+    try {
+    	product.setId(id);
+    	product.setIdStore(idstore);
+    	return ResponseEntity.ok().body(ps.updateProduct(product));
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		HashMap<String, String> returnBody = new HashMap<String, String>();
+    	returnBody.put("message","Hello World"+ e);
+    	return ResponseEntity.badRequest().body(returnBody);
+		}
+    }	
 }

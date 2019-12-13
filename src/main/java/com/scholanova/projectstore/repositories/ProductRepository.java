@@ -48,10 +48,6 @@ public class ProductRepository {
 		KeyHolder holder = new GeneratedKeyHolder();
 
 		String query = "INSERT INTO PRODUCT (NAME,TYPE,PRICE,IDSTORE) VALUES (:name, :type, :price, :idstore) ";
-		//query = "INSERT INTO PRODUCT (NAME,TYPE,PRICE,IDSTORE) VALUES ('poire', 'fruit',60,2) ";
-		/*query = "INSERT INTO STORES " +
-				"(NAME) VALUES " +
-				"(:name)";*/
 		SqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("name", product.getName()/*+product.getType()+product.getPrice()+product.getidStore()*/).addValue("type", product.getType()).addValue("price", product.getPrice()).addValue("idstore", product.getidStore());
 
@@ -64,6 +60,17 @@ public class ProductRepository {
 			return null;
 		}
 
+	}
+
+	public int update(Product product) {
+			String query = "UPDATE PRODUCT SET NAME = :name, PRICE = :price WHERE ID = :id";
+	
+	        Map<String, Object> parameters = new HashMap<>();
+	        parameters.put("id", product.getId());
+	        parameters.put("name", product.getName());
+	        parameters.put("price", product.getPrice());
+	        
+	        return jdbcTemplate.update(query, parameters);
 	}
 
 }
