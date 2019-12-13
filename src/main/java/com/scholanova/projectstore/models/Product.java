@@ -17,6 +17,14 @@ public class Product {
         this.price = price;
         this.idStore = idStore;
     }
+    
+    public Product(Product p) {
+        this.id = p.getId();
+        this.name = p.getName();
+        this.type = p.getType();
+        this.price = p.getPrice();
+        this.idStore = p.getidStore();
+    }
 
     public Integer getId() {
         return id;

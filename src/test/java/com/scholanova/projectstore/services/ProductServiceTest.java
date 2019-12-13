@@ -137,5 +137,19 @@ public class ProductServiceTest {
 		assertThat(returnedProduct).isEqualTo(product);
 
 	}
+	
+	@Test
+	void givenNotExistingId_whenDisplay_getProductNotFoundException() throws Exception {
+		// GIVEN
+		Integer idProduct = -1;
+		Integer idStore = -1;
+		when(productRepository.getById(idProduct)).thenThrow(new ProductNotFoundException());
+		
+		// WHEN
+		// THEN
+		assertThrows(ProductNotFoundException.class, () -> {
+			productService.getProduct(idProduct,idStore);
+		});
+	}
 
 }
