@@ -41,6 +41,12 @@ public class ProductRepositoryTest {
         jdbcTemplate.execute(
                 String.format(query, p.getId(), p.getName(),p.getType(),p.getPrice(),p.getidStore()));
     }
+    
+    private void updateProduct(Product p) {
+    	String query = "UPDATE PRODUCT SET NAME = '%s', PRICE = '%d' WHERE ID = '%d'";
+    	jdbcTemplate.execute(
+                String.format(query,p.getName(),p.getPrice(),p.getId()));
+    }
     @Nested
     class Test_getProduct {
 
@@ -75,7 +81,7 @@ public class ProductRepositoryTest {
     class Test_createProduct {
 
         @Test
-        void whenCreateProduct_thenProductIsInDatabaseWithAllInformation() {
+        void givenProductWithValues_whenCreateProductInDatabases_thenProductIsInDatabaseWithAllInformation() {
             // Given
             Product product = new Product(1, "poire","fruit",60,2);
             // When
@@ -106,24 +112,28 @@ public class ProductRepositoryTest {
             assertThat(rows).isNotNull();
 
         }
-    	
+    	//On Cree Produit
+        //On met a jour le produit en base, on recupère UpdatedProduct
+        //Product est donc diifférent de UpdatedProduct
+        //Mais j'ai une erreur DAO duplicate Key Exception
         @Test
-        void whenUpdateProduct_thenUpdateProduct() throws Exception {
+        void givenAProductWhenUpdateProductWithNewValueThenProductisDifferentThanUpdatedProduct() throws Exception {
             // Given
-            Product product = productRepository.create(new Product(3, "poire","fruit",60,2));
-            //insertProduct(product);
+            Product product2 = productRepository.create(new Product(3, "pomme","fruit",90,2));
+            insertProduct(product2);
             
-            String newName = "poire jaune";
+            String newName = "pomme braeburn";
             Integer newPrice = 200;
             
             
             // When
             productRepository.update(new Product(3,newName,"fruit",newPrice,2));
             Product updatedProduct = productRepository.getById(3);
+            updateProduct(updatedProduct);
             // Then
             
-            assertThat(product.getName()).isNotEqualTo(updatedProduct.getName());
-            assertThat(product.getName()).isNotEqualTo(updatedProduct.getName());
+            assertThat(product2.getName()).isNotEqualTo(updatedProduct.getName());
+            assertThat(product2.getName()).isNotEqualTo(updatedProduct.getName());
         }
     }
 }
