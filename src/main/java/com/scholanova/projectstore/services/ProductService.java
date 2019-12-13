@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
 import com.scholanova.projectstore.exceptions.ProductNameCannotBeEmptyException;
+import com.scholanova.projectstore.exceptions.ProductNotFoundException;
+import com.scholanova.projectstore.exceptions.ProductNotInStoreException;
 import com.scholanova.projectstore.exceptions.ProductPriceNotValidException;
 import com.scholanova.projectstore.exceptions.ProductTypeNotValidException;
 import com.scholanova.projectstore.exceptions.StoreNameCannotBeEmptyException;
@@ -23,7 +25,7 @@ public class ProductService {
     }
     
     public Product create(Product product) throws ProductNameCannotBeEmptyException,ProductTypeNotValidException, ProductPriceNotValidException{
-    	/*
+    	
         if (isNameMissing(product)) {
             throw new ProductNameCannotBeEmptyException();
         }
@@ -32,7 +34,7 @@ public class ProductService {
         }
         if(isPriceNotValid(product)) {
         	throw new ProductPriceNotValidException();
-        }*/
+        }
     	return productRepository.create(product);
     }
     
@@ -42,7 +44,7 @@ public class ProductService {
     }
     
     private boolean isTypeValid(Product product) {
-    	return product.getType().equals("Fruit") || product.getType().equals("Nail");
+    	return product.getType().equals("fruit") || product.getType().equals("nail");
     }
     
     private boolean isPriceNotValid(Product product) {
@@ -52,5 +54,17 @@ public class ProductService {
     public Store getById(Integer id) throws ModelNotFoundException {
     	
         return storeRepository.getById(id);
+    }
+    
+    public Product getProduct(Integer id,Integer storeId) throws ProductNotInStoreException, ProductNotFoundException {
+    	Product p = productRepository.getById(id);
+    	if(!isProductInStore(p,storeId)) {
+    		throw new ProductNotInStoreException("id is "+p.getId() +" and product store id is " + p.getidStore() + " but call was made from storeId " + storeId);
+    	}
+        return p;
+    }
+    
+    private boolean isProductInStore(Product p,Integer storeId) {
+    	return p.getidStore() == storeId;
     }
 }

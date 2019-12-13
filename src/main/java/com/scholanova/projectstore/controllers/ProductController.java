@@ -1,12 +1,16 @@
 package com.scholanova.projectstore.controllers;
 
+import java.util.HashMap;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.scholanova.projectstore.exceptions.ModelNotFoundException;
 import com.scholanova.projectstore.exceptions.ProductNameCannotBeEmptyException;
 import com.scholanova.projectstore.exceptions.ProductPriceNotValidException;
 import com.scholanova.projectstore.exceptions.StoreNameCannotBeEmptyException;
@@ -29,8 +33,20 @@ public class ProductController {
     		Product newProduct = ps.create(product);
     		return ResponseEntity.status(HttpStatus.OK).body(newProduct);
     	} catch (Exception e) {
-    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request");
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request" + e);
     	}
+    }
+    
+    @GetMapping(path="/stores/{store_id}/stocks/{id}")
+    	public ResponseEntity<?> getProduct(@PathVariable("id") Integer id,@PathVariable("store_id") Integer idstore) throws Exception {
+        try {
+        	return ResponseEntity.ok().body(ps.getProduct(id,idstore));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			HashMap<String, String> returnBody = new HashMap<String, String>();
+        	returnBody.put("message",""+ e);
+        	return ResponseEntity.badRequest().body(returnBody);
+		}
     }
 	
 }

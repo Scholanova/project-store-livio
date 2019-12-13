@@ -12,7 +12,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
+import com.scholanova.projectstore.exceptions.ProductNotFoundException;
 import com.scholanova.projectstore.models.Product;
+import com.scholanova.projectstore.models.Store;
 
 @Repository
 public class ProductRepository {
@@ -22,11 +24,12 @@ public class ProductRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public Product getById(Integer id) throws ModelNotFoundException {
+	public Product getById(Integer id) throws ProductNotFoundException {
 		String query = "SELECT ID as id, " +
 				"NAME as name, " +
 				"TYPE as type, " +
-				"PRICE as price "+
+				"PRICE as price, "+
+				"IDSTORE as idstore "+ 
 				"FROM PRODUCT " +
 				"WHERE ID = :id";
 
@@ -38,7 +41,7 @@ public class ProductRepository {
 				new BeanPropertyRowMapper<>(Product.class))
 				.stream()
 				.findFirst()
-				.orElseThrow(ModelNotFoundException::new);
+				.orElseThrow(ProductNotFoundException::new);
 	}
 	
 	public Product create(Product product) {
@@ -50,16 +53,17 @@ public class ProductRepository {
 				"(NAME) VALUES " +
 				"(:name)";*/
 		SqlParameterSource parameters = new MapSqlParameterSource()
-				.addValue("name", product.getName()+product.getType()+product.getPrice()+product.getidStore()).addValue("type", product.getType()).addValue("price", product.getPrice()).addValue("idstore", product.getidStore());
+				.addValue("name", product.getName()/*+product.getType()+product.getPrice()+product.getidStore()*/).addValue("type", product.getType()).addValue("price", product.getPrice()).addValue("idstore", product.getidStore());
 
 		jdbcTemplate.update(query, parameters, holder);
 		
 		Integer newlyCreatedId = (Integer) holder.getKeys().get("ID");
 		try {
 			return this.getById(newlyCreatedId);
-		} catch (ModelNotFoundException e) {
+		} catch (ProductNotFoundException e) {
 			return null;
 		}
 
 	}
+
 }
