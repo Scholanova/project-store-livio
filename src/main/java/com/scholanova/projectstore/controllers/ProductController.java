@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,5 +63,17 @@ public class ProductController {
     	returnBody.put("message","Hello World"+ e);
     	return ResponseEntity.badRequest().body(returnBody);
 		}
-    }	
+    }
+    
+    /*
+    @DeleteMapping(path = "/stores/{store_id}/stocks/{id}")
+    public ResponseEntity<?> deleteStation(@PathVariable("id") Integer id,@PathVariable("store_id") Integer idstore) {
+    	try {
+			productService.delete(id);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} catch (ModelNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ModelNotFoundException");
+		}
+        
+    }*/
 }

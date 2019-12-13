@@ -69,15 +69,14 @@ public class ProductService {
     }
 
 	public Product updateProduct(Product product) throws ProductNotFoundException, ProductNotInStoreException, ProductNameCannotBeEmptyException, ProductTypeNotValidException, ProductPriceNotValidException {
-		
-		//supposément lance product not in store si produit pas dans le store
-		
+
         if (isNameMissing(product)) {
             throw new ProductNameCannotBeEmptyException();
         }
         if(isPriceNotValid(product)) {
         	throw new ProductPriceNotValidException();
         }
+        //supposément lance product not in store si produit pas dans le store
 		Product p = getProduct(product.getId(),product.getidStore());
 		
 		int rows = productRepository.update(product);
