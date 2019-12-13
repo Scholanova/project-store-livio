@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset scholanova:1
+--changeset scholanova:
 CREATE TABLE IF NOT EXISTS PRODUCT (
   ID                  SERIAL          NOT NULL,
   NAME                VARCHAR(255)    NOT NULL,

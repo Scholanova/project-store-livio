@@ -9,11 +9,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
 import com.scholanova.projectstore.models.Product;
 
-
+@Repository
 public class ProductRepository {
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -43,10 +44,13 @@ public class ProductRepository {
 	public Product create(Product product) {
 		KeyHolder holder = new GeneratedKeyHolder();
 
-		String query = "INSERT INTO PRODUCT (NAME,TYPE,QUANTITY,IDSTORE) VALUES (:name) (:type) (:price) (:idstore) ";
-
+		String query = "INSERT INTO PRODUCT (NAME,TYPE,PRICE,IDSTORE) VALUES (:name, :type, :price, :idstore) ";
+		//query = "INSERT INTO PRODUCT (NAME,TYPE,PRICE,IDSTORE) VALUES ('poire', 'fruit',60,2) ";
+		query = "INSERT INTO STORES " +
+				"(NAME) VALUES " +
+				"(:name)";
 		SqlParameterSource parameters = new MapSqlParameterSource()
-				.addValue("name", product.getName()).addValue("price", product.getPrice()).addValue("idstore", product.getidStore());
+				.addValue("name", product.getName()+product.getType()+product.getPrice()+product.getidStore()).addValue("type", product.getType()).addValue("price", product.getPrice()).addValue("idstore", product.getidStore());
 
 		jdbcTemplate.update(query, parameters, holder);
 		
