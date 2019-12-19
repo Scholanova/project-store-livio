@@ -76,7 +76,18 @@ public class ProductRepository {
 	}
 	
 	public List<Product> getProducts(int storeId){
-		ArrayList<Product> listProducts = new ArrayList<Product>();
+		
+		ArrayList<Product> listProducts = new ArrayList<Product>();		
+		
+		String query = "select * from product where idstore = :id";
+		Map<String, Object> parameters = new HashMap<>();
+        parameters.put("id", storeId);
+        
+        
+        
+        listProducts =   (ArrayList<Product>) jdbcTemplate.query(query,
+                        parameters,
+                        new BeanPropertyRowMapper<>(Product.class));;
 		
 		return listProducts;
 	}
@@ -85,8 +96,8 @@ public class ProductRepository {
 		String query = "select sum(price) from product where idstore = :id";
 		Map<String, Object> parameters = new HashMap<>();
         parameters.put("id", storeId);
-        //return jdbcTemplate.query(query, parameters);
-        return 0;
+        int sum =  jdbcTemplate.queryForObject(query, parameters,Integer.class);
+        return sum;
 	}
 
 }

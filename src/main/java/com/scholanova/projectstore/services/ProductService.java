@@ -91,4 +91,8 @@ public class ProductService {
 		// TODO Auto-generated method stub
 		return productRepository.getProducts(idstore);
 	}
+	
+	public int getStoreSum(Integer idstore) {
+		return productRepository.getStoreSum(idstore);
+	}
 }
