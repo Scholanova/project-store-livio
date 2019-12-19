@@ -18,12 +18,21 @@ import com.scholanova.projectstore.repositories.StoreRepository;
 
 @Service
 public class ProductService {
-    private ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+	private ProductRepository productRepository;
+    private StoreRepository storeRepository;
+    
+    
+    public ProductService(ProductRepository productRepository,StoreRepository storeRepository) {
         this.productRepository = productRepository;
+        this.storeRepository = storeRepository;
     }
     
+    public Store getStoreById(Integer id) throws ModelNotFoundException {
+    	
+        return storeRepository.getById(id);
+    }
+        
     public Product create(Product product) throws ProductNameCannotBeEmptyException,ProductTypeNotValidException, ProductPriceNotValidException{
     	
         if (isNameMissing(product)) {
@@ -50,12 +59,7 @@ public class ProductService {
     private boolean isPriceNotValid(Product product) {
     	return product.getPrice() < 1;
     }
-   /* 
-    public Store getById(Integer id) throws ModelNotFoundException {
-    	
-        return storeRepository.getById(id);
-    }
-    */
+
     public Product getProduct(Integer id,Integer storeId) throws ProductNotInStoreException, ProductNotFoundException {
     	Product p = productRepository.getById(id);
     	if(!isProductInStore(p,storeId)) {
@@ -95,4 +99,5 @@ public class ProductService {
 	public int getStoreSum(Integer idstore) {
 		return productRepository.getStoreSum(idstore);
 	}
+
 }

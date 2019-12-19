@@ -82,12 +82,7 @@ public class ProductRepository {
 		String query = "select * from product where idstore = :id";
 		Map<String, Object> parameters = new HashMap<>();
         parameters.put("id", storeId);
-        
-        
-        
-        listProducts =   (ArrayList<Product>) jdbcTemplate.query(query,
-                        parameters,
-                        new BeanPropertyRowMapper<>(Product.class));;
+        listProducts =  (ArrayList<Product>) jdbcTemplate.query(query,parameters,new BeanPropertyRowMapper<>(Product.class));;
 		
 		return listProducts;
 	}

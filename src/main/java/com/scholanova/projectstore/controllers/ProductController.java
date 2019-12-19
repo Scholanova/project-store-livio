@@ -18,6 +18,7 @@ import com.scholanova.projectstore.exceptions.ProductPriceNotValidException;
 import com.scholanova.projectstore.exceptions.StoreNameCannotBeEmptyException;
 import com.scholanova.projectstore.models.Product;
 import com.scholanova.projectstore.models.Store;
+import com.scholanova.projectstore.resources.StoreResource;
 import com.scholanova.projectstore.services.ProductService;
 
 @RestController
@@ -92,7 +93,15 @@ public class ProductController {
     @GetMapping(path="/stores/{store_id}/stocks/sum")
 	public ResponseEntity<?> getStoreSum(@PathVariable("store_id") Integer idstore) throws Exception {
     try {
-    	return ResponseEntity.ok().body(ps.getStoreSum(idstore));
+    	
+    	StoreResource store = new StoreResource();
+
+    	store.setName(ps.getStoreById(idstore).getName());
+    	
+    	store.setId(idstore);
+    	store.setStockTotalValue((long) ps.getStoreSum(idstore));
+    	
+    	return ResponseEntity.ok().body(store);
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		HashMap<String, String> returnBody = new HashMap<String, String>();
