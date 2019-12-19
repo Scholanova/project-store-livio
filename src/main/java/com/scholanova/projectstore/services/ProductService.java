@@ -1,5 +1,7 @@
 package com.scholanova.projectstore.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
@@ -83,5 +85,10 @@ public class ProductService {
 		} else {
 			return null;
 		}
+	}
+
+	public List<Product> getProducts(Integer idstore) {
+		// TODO Auto-generated method stub
+		return productRepository.getProducts(idstore);
 	}
 }

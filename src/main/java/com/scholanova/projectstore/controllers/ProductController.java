@@ -76,4 +76,16 @@ public class ProductController {
 		}
         
     }*/
+    
+    @GetMapping(path="/stores/{store_id}/stocks")
+	public ResponseEntity<?> getProducts(@PathVariable("store_id") Integer idstore) throws Exception {
+    try {
+    	return ResponseEntity.ok().body(ps.getProducts(idstore));
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		HashMap<String, String> returnBody = new HashMap<String, String>();
+    	returnBody.put("message : problemes list product ",""+ e);
+    	return ResponseEntity.badRequest().body(returnBody);
+	}
+}
 }

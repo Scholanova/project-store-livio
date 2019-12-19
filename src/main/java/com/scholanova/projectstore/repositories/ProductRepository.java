@@ -1,6 +1,8 @@
 package com.scholanova.projectstore.repositories;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -71,6 +73,20 @@ public class ProductRepository {
 	        parameters.put("price", product.getPrice());
 	        
 	        return jdbcTemplate.update(query, parameters);
+	}
+	
+	public List<Product> getProducts(int storeId){
+		ArrayList<Product> listProducts = new ArrayList<Product>();
+		
+		return listProducts;
+	}
+	
+	public int getStoreSum(int storeId) {
+		String query = "select sum(price) from product where idstore = :id";
+		Map<String, Object> parameters = new HashMap<>();
+        parameters.put("id", storeId);
+        //return jdbcTemplate.query(query, parameters);
+        return 0;
 	}
 
 }
