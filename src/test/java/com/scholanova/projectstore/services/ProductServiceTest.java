@@ -19,6 +19,7 @@ import com.scholanova.projectstore.exceptions.*;
 import com.scholanova.projectstore.models.Product;
 import com.scholanova.projectstore.models.Store;
 import com.scholanova.projectstore.repositories.ProductRepository;
+import com.scholanova.projectstore.repositories.StoreRepository;
 
 
 
@@ -29,10 +30,13 @@ public class ProductServiceTest {
 
 	@Mock
 	private ProductRepository productRepository;
+	
+	@Mock
+	private StoreRepository storeRepository;
 
 	@BeforeEach
 	void setUp() {
-		productService = new ProductService(productRepository);
+		productService = new ProductService(productRepository,storeRepository);
 	}
 	
 	@Test

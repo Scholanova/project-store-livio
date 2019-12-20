@@ -1,6 +1,7 @@
 package com.scholanova.projectstore.controllers;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
@@ -79,13 +83,19 @@ public class ProductController {
     }*/
     
     @GetMapping(path="/stores/{store_id}/stocks")
-	public ResponseEntity<?> getProducts(@PathVariable("store_id") Integer idstore) throws Exception {
+	public ResponseEntity<?> getProducts(@PathVariable("store_id") Integer idstore,@RequestParam(name = "type") Optional<String>  type) throws Exception {
     try {
-    	return ResponseEntity.ok().body(ps.getProducts(idstore));
+    	   	
+    	if(type.isPresent()) {
+    		return ResponseEntity.ok().body(ps.getProductsByType(idstore,type.get()));
+    	}
+    	else {
+    		return ResponseEntity.ok().body(ps.getProducts(idstore));
+    	}
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		HashMap<String, String> returnBody = new HashMap<String, String>();
-    	returnBody.put("message : problemes list product ",""+ e);
+    	returnBody.put("message : there is a problem ",""+ e);
     	return ResponseEntity.badRequest().body(returnBody);
 		}
     }
@@ -97,7 +107,6 @@ public class ProductController {
     	StoreResource store = new StoreResource();
 
     	store.setName(ps.getStoreById(idstore).getName());
-    	
     	store.setId(idstore);
     	store.setStockTotalValue((long) ps.getStoreSum(idstore));
     	
@@ -109,4 +118,21 @@ public class ProductController {
     	return ResponseEntity.badRequest().body(returnBody);
 		}
     }
+    
+    //Pouvoir récuppérer la liste de tous les objets d'un magasin d'un certain type
+    /*
+    @GetMapping(path="/stores/{idstore}/stocks")
+	public ResponseEntity<?> getProductsByType(@PathVariable("idstore") String idstore,@RequestParam(name = "type")String type) throws Exception {
+    	System.out.println("type = " + type);
+    try {
+    	System.out.println("type = " + type);
+    	return ResponseEntity.ok().body(ps.getProductsByType(Integer.valueOf(idstore),type));
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		HashMap<String, String> returnBody = new HashMap<String, String>();
+    	returnBody.put("message : problemes list product ",""+ e);
+    	return ResponseEntity.badRequest().body(returnBody);
+		}
+    }*/
+    
 }

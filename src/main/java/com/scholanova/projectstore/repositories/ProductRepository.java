@@ -87,12 +87,32 @@ public class ProductRepository {
 		return listProducts;
 	}
 	
-	public int getStoreSum(int storeId) {
+	public Integer getStoreSum(int storeId) {
 		String query = "select sum(price) from product where idstore = :id";
 		Map<String, Object> parameters = new HashMap<>();
         parameters.put("id", storeId);
-        int sum =  jdbcTemplate.queryForObject(query, parameters,Integer.class);
-        return sum;
+                       
+       // int sum =  0;
+        if(jdbcTemplate.queryForObject(query, parameters,Integer.class) == null) {
+        	return 0;
+        }
+        else {
+        	return jdbcTemplate.queryForObject(query, parameters,Integer.class);
+        }
+       
+	}
+
+	public List<Product> getProductsByType(Integer idstore, String type) {
+		
+		ArrayList<Product> listProducts = new ArrayList<Product>();		
+		
+		String query = "select * from product where idstore = :id and type = :type";
+		Map<String, Object> parameters = new HashMap<>();
+        parameters.put("id", idstore);
+        parameters.put("type", type);
+        listProducts =  (ArrayList<Product>) jdbcTemplate.query(query,parameters,new BeanPropertyRowMapper<>(Product.class));;
+		
+		return listProducts;
 	}
 
 }

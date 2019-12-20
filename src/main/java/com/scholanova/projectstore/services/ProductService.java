@@ -100,4 +100,9 @@ public class ProductService {
 		return productRepository.getStoreSum(idstore);
 	}
 
+	public List<Product> getProductsByType(Integer idstore, String type) {
+		// TODO Auto-generated method stub
+		return productRepository.getProductsByType(idstore, type);
+	}
+
 }
