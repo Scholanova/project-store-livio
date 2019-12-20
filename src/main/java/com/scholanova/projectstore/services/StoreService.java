@@ -1,9 +1,14 @@
 package com.scholanova.projectstore.services;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
+import com.scholanova.projectstore.exceptions.PriceNotValidException;
 import com.scholanova.projectstore.exceptions.StoreNameCannotBeEmptyException;
 import com.scholanova.projectstore.models.Store;
 import com.scholanova.projectstore.repositories.StoreRepository;
+import com.scholanova.projectstore.resources.StoreResource;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,5 +43,13 @@ public class StoreService {
     public void delete(Integer id) throws ModelNotFoundException {
     	
         storeRepository.delete(id);
+    }
+    
+    public List<StoreResource>  getStoresSuperiorPrice(Integer price) throws PriceNotValidException{
+    	if(price <=0) {
+    		throw new PriceNotValidException();
+    	}
+    	
+    	return storeRepository.getStoresSuperiorPrice(price);
     }
 }

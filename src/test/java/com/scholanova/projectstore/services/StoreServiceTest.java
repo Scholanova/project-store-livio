@@ -1,6 +1,7 @@
 package com.scholanova.projectstore.services;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
+import com.scholanova.projectstore.exceptions.PriceNotValidException;
 import com.scholanova.projectstore.exceptions.StoreNameCannotBeEmptyException;
 import com.scholanova.projectstore.models.Store;
 import com.scholanova.projectstore.repositories.StoreRepository;
@@ -120,5 +121,22 @@ class StoreServiceTest {
 		});
 		
 		verify(storeRepository,atLeastOnce()).delete(id1);
+	}
+	
+	@Test
+	void givenPriceValueLowerThanWhenGetStoreStoreThenThrowExcepion() throws Exception{
+		//Given
+		
+		int price =-1;
+		
+		//When
+		
+		assertThrows(PriceNotValidException.class, () -> {
+			storeService.getStoresSuperiorPrice(price);
+		});
+		
+		//Then
+		
+		verify(storeRepository, never()).getStoresSuperiorPrice(price);
 	}
 }
