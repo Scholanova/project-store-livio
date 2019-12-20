@@ -127,7 +127,7 @@ class StoreServiceTest {
 	void givenPriceValueLowerThanWhenGetStoreStoreThenThrowExcepion() throws Exception{
 		//Given
 		
-		int price =-1;
+		long price =-1;
 		
 		//When
 		

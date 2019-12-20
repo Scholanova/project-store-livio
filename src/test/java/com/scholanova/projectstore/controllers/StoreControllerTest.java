@@ -257,4 +257,9 @@ class StoreControllerTest {
 //            assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
 //            assertThat(responseEntity.getBody()).isEqualTo(errorBody);
 //        }
+    	
+    	@Test
+    	void Test_getScoresPrices_givenPriceLowerThan0_ThenReturns404() throws Exception{
+    		
+    	}
 }

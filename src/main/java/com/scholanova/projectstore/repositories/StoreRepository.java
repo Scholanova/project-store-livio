@@ -86,7 +86,7 @@ public class StoreRepository {
         return list;
 	}
 	
-	public List<StoreResource> getStoresSuperiorPrice(Integer price) {
+	public List<StoreResource> getStoresSuperiorPrice(Long price) {
 		List<StoreResource> list = new ArrayList<StoreResource>();
 		String query ="select distinct stores.id, stores.name,sum(product.price) as stockTotalValue from stores inner join product on stores.id = product.idstore group by stores.id having sum(product.price) >= :price;";
 		Map<String, Object> parameters = new HashMap<>();

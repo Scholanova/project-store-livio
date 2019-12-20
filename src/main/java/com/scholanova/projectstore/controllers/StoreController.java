@@ -5,10 +5,12 @@ import com.scholanova.projectstore.exceptions.StoreNameCannotBeEmptyException;
 import com.scholanova.projectstore.models.Product;
 import com.scholanova.projectstore.models.Store;
 import com.scholanova.projectstore.repositories.ProductRepository;
+import com.scholanova.projectstore.resources.StoreResource;
 import com.scholanova.projectstore.services.ProductService;
 import com.scholanova.projectstore.services.StoreService;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.websocket.server.PathParam;
 
@@ -79,4 +81,23 @@ public class StoreController {
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request");
     	}
     }*/
+    
+    
+    @GetMapping(path = "/stores/price/{price}")
+    public ResponseEntity<?> getStoresSuperiorPrice(@PathVariable("price") Long price){
+        try {
+        	
+        	List<StoreResource> list = storeService.getStoresSuperiorPrice(price);
+        	if(list.isEmpty()) {
+        		return (ResponseEntity<?>) ResponseEntity.ok("no content");
+        	}
+        	return ResponseEntity.ok().body(storeService.getStoresSuperiorPrice(price));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			HashMap<String, String> returnBody = new HashMap<String, String>();
+        	returnBody.put("message", "Price hwat");
+        	return ResponseEntity.badRequest().body(returnBody);
+		}
+    	
+    }
 }

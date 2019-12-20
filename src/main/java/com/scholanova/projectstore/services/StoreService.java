@@ -45,7 +45,7 @@ public class StoreService {
         storeRepository.delete(id);
     }
     
-    public List<StoreResource>  getStoresSuperiorPrice(Integer price) throws PriceNotValidException{
+    public List<StoreResource> getStoresSuperiorPrice(Long price) throws PriceNotValidException{
     	if(price <=0) {
     		throw new PriceNotValidException();
     	}

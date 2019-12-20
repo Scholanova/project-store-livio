@@ -136,7 +136,7 @@ class StoreRepositoryTest {
             insertProduct(mockedProduct3);
             
             //When
-            List<StoreResource> list = storeRepository.getStoresSuperiorPrice(100);
+            List<StoreResource> list = storeRepository.getStoresSuperiorPrice(100L);
             //Then
             assertEquals(2,list.size());
     		
@@ -162,7 +162,7 @@ class StoreRepositoryTest {
             insertProduct(mockedProduct3);
             */
     		
-            int price = 100;
+            long price = 100;
             //When
             List<StoreResource> list = storeRepository.getStoresSuperiorPrice(price);
             //Then
