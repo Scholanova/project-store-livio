@@ -114,5 +114,14 @@ public class ProductRepository {
 		
 		return listProducts;
 	}
+	
+	public int delete(Integer idproduct, Integer idstore) {
+		String query = "delete from product where idStore = :idStore and id = :id";
+		Map<String, Object> parameters = new HashMap<>();
+        parameters.put("idStore", idstore);
+        parameters.put("id", idproduct);
+        
+        return jdbcTemplate.update(query, parameters);
+	}
 
 }

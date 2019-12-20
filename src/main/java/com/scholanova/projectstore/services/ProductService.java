@@ -104,5 +104,10 @@ public class ProductService {
 		// TODO Auto-generated method stub
 		return productRepository.getProductsByType(idstore, type);
 	}
-
+	
+	public int delete(Integer idproduct,Integer idstore) throws Exception {
+		getProduct(idproduct, idstore);
+		return productRepository.delete(idproduct, idstore);
+	}
+		
 }

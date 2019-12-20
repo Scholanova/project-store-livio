@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
 import com.scholanova.projectstore.exceptions.ProductNameCannotBeEmptyException;
+import com.scholanova.projectstore.exceptions.ProductNotFoundException;
 import com.scholanova.projectstore.exceptions.ProductPriceNotValidException;
 import com.scholanova.projectstore.exceptions.StoreNameCannotBeEmptyException;
 import com.scholanova.projectstore.models.Product;
@@ -38,7 +39,7 @@ public class ProductController {
     public ResponseEntity<?> createProduct(@RequestBody Product product, @PathVariable("store_id") Integer storeid) throws Exception {
     	try {
     		List<Product> list = ps.getProductsByType(storeid, "fruit");
-    		if(list.size()>4) {
+    		if(product.getType().equals("fruit") && list.size()>=4) {
     			return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body("Magasin is full of fruit");
     		}
     		
@@ -141,4 +142,21 @@ public class ProductController {
 		}
     }*/
     
+    @DeleteMapping(path = "/stores/{idstore}/stocks/{idproduct}")
+    public ResponseEntity<?> deleteStore(@PathVariable("idstore") Integer idstore,@PathVariable("idproduct") Integer idproduct) throws Exception {
+        try {
+        	ps.delete(idproduct, idstore);
+        	return ResponseEntity.ok("Stock with id : " + idproduct + " was deleted");
+		} catch (ModelNotFoundException e) {
+			HashMap<String, String> returnBody = new HashMap<String, String>();
+        	returnBody.put("message", "Id must be valid");
+        	return ResponseEntity.badRequest().body(returnBody);
+		}
+        
+        catch(ProductNotFoundException e) {
+			HashMap<String, String> returnBody = new HashMap<String, String>();
+        	returnBody.put("message", "product don't existe");
+        	return ResponseEntity.badRequest().body(returnBody);
+        }
+    }
 }
