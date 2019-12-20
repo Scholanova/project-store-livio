@@ -1,7 +1,10 @@
 package com.scholanova.projectstore.repositories;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
+import com.scholanova.projectstore.models.Product;
 import com.scholanova.projectstore.models.Store;
+import com.scholanova.projectstore.resources.StoreResource;
+
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -10,7 +13,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -70,5 +75,23 @@ public class StoreRepository {
 		if(nbLinesModified == 0) {
 			throw new ModelNotFoundException();
 		}
+	}
+	
+	public List<Integer> getStoresIdSuperiorPrice(Integer price) {
+		List list = new ArrayList<Integer>();
+		String query ="select distinct idstore from product group by product.id having sum(price) >= :price";
+		Map<String, Object> parameters = new HashMap<>();
+        parameters.put("price", price);
+        list =  (ArrayList<Integer>) jdbcTemplate.query(query,parameters,new BeanPropertyRowMapper<>(Integer.class));
+        return list;
+	}
+	
+	public List<StoreResource> getStoresSuperiorPrice(Integer price) {
+		List list = new ArrayList<Integer>();
+		String query ="select distinct stores.id, stores.name,sum(product.price) from stores inner join product on stores.id = product.idstore group by stores.id having sum(product.price) >= :price;";
+		Map<String, Object> parameters = new HashMap<>();
+        parameters.put("price", price);
+        list =  (ArrayList<StoreResource>) jdbcTemplate.query(query,parameters,new BeanPropertyRowMapper<>(StoreResource.class));
+        return list;
 	}
 }
