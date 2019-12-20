@@ -1,6 +1,7 @@
 package com.scholanova.projectstore.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,11 @@ public class ProductController {
     @PostMapping(path = "/stores/{store_id}/stocks")
     public ResponseEntity<?> createProduct(@RequestBody Product product, @PathVariable("store_id") Integer storeid) throws Exception {
     	try {
+    		List<Product> list = ps.getProductsByType(storeid, "fruit");
+    		if(list.size()>4) {
+    			return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body("Magasin is full of fruit");
+    		}
+    		
     		product.setIdStore(storeid);
     		Product newProduct = ps.create(product);
     		return ResponseEntity.status(HttpStatus.OK).body(newProduct);
