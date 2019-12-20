@@ -1,7 +1,10 @@
 package com.scholanova.projectstore.repositories;
 
 import com.scholanova.projectstore.exceptions.ModelNotFoundException;
+import com.scholanova.projectstore.models.Product;
 import com.scholanova.projectstore.models.Store;
+import com.scholanova.projectstore.resources.StoreResource;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,7 +15,11 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 @SpringJUnitConfig(StoreRepository.class)
 @JdbcTest
@@ -75,14 +82,6 @@ class StoreRepositoryTest {
             assertThat(createdStore.getName()).isEqualTo(storeName);
         }
     }
-
-    private void insertStore(Store store) {
-        String query = "INSERT INTO STORES " +
-                "(ID, NAME) " +
-                "VALUES ('%d', '%s')";
-        jdbcTemplate.execute(
-                String.format(query, store.getId(), store.getName()));
-    }
     
     
     @Nested
@@ -114,5 +113,81 @@ class StoreRepositoryTest {
                 storeRepository.getById(id);
             });
         }
+    }
+    
+    @Nested 
+    class Test_getStoresWithPrice{
+    	@Test
+    	void whenExistingStoresWithProductsThenReturnsStoreResource(){
+    		
+    		//Given
+    		Store auchan = new Store(1,"Auchan");
+    		Store cora = new Store(2,"Cora");
+    		Store carrouf = new Store(3,"Carrouf");  		
+    		insertStore(auchan);
+    		insertStore(cora);
+    		insertStore(carrouf);
+    		
+            Product mockedProduct = new Product(1, "Poire", "Fruit", 30, 1);
+            insertProduct(mockedProduct);
+            Product mockedProduct2 = new Product(2, "Pomme", "Fruit", 400, 2);
+            insertProduct(mockedProduct2);
+            Product mockedProduct3 = new Product(3, "Papaye", "Fruit", 500, 3);
+            insertProduct(mockedProduct3);
+            
+            //When
+            List<StoreResource> list = storeRepository.getStoresSuperiorPrice(100);
+            //Then
+            assertEquals(2,list.size());
+    		
+    	}
+    	@Test
+    	void whenGetStoresSuperiorPriceThenReturnedTotalStockValueIsSuperiorToPrice(){
+    		
+    		//Given
+    		
+    		/*
+    		Store auchan = new Store(1,"Auchan");
+    		Store cora = new Store(2,"Cora");
+    		Store carrouf = new Store(3,"Carrouf");  		
+    		insertStore(auchan);
+    		insertStore(cora);
+    		insertStore(carrouf);
+    		
+            Product mockedProduct = new Product(1, "Poire", "Fruit", 30, 1);
+            insertProduct(mockedProduct);
+            Product mockedProduct2 = new Product(2, "Pomme", "Fruit", 400, 2);
+            insertProduct(mockedProduct2);
+            Product mockedProduct3 = new Product(3, "Papaye", "Fruit", 500, 3);
+            insertProduct(mockedProduct3);
+            */
+    		
+            int price = 100;
+            //When
+            List<StoreResource> list = storeRepository.getStoresSuperiorPrice(price);
+            //Then
+            
+            for(StoreResource store : list) {
+            	System.out.println(store);
+            	assertTrue(store.getStockTotalValue()>= price);
+            	
+            }
+
+    	}
+    }
+    
+    private void insertStore(Store store) {
+        String query = "INSERT INTO STORES " +
+                "(ID, NAME) " +
+                "VALUES ('%d', '%s')";
+        jdbcTemplate.execute(
+                String.format(query, store.getId(), store.getName()));
+    }
+    
+    private void insertProduct(Product p) {
+		String query = "INSERT INTO PRODUCT (ID,NAME,TYPE,PRICE,IDSTORE) VALUES ('%d','%s','%s','%d','%d') ";
+
+        jdbcTemplate.execute(
+                String.format(query, p.getId(), p.getName(),p.getType(),p.getPrice(),p.getidStore()));
     }
 }

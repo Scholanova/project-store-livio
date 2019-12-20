@@ -77,8 +77,8 @@ public class StoreRepository {
 		}
 	}
 	
-	public List<Integer> getStoresIdSuperiorPrice(Integer price) {
-		List list = new ArrayList<Integer>();
+	public List<Integer> getStoresSuperiorPriceId(Integer price) {
+		List<Integer> list = new ArrayList<Integer>();
 		String query ="select distinct idstore from product group by product.id having sum(price) >= :price";
 		Map<String, Object> parameters = new HashMap<>();
         parameters.put("price", price);
@@ -87,8 +87,8 @@ public class StoreRepository {
 	}
 	
 	public List<StoreResource> getStoresSuperiorPrice(Integer price) {
-		List list = new ArrayList<Integer>();
-		String query ="select distinct stores.id, stores.name,sum(product.price) from stores inner join product on stores.id = product.idstore group by stores.id having sum(product.price) >= :price;";
+		List<StoreResource> list = new ArrayList<StoreResource>();
+		String query ="select distinct stores.id, stores.name,sum(product.price) as stockTotalValue from stores inner join product on stores.id = product.idstore group by stores.id having sum(product.price) >= :price;";
 		Map<String, Object> parameters = new HashMap<>();
         parameters.put("price", price);
         list =  (ArrayList<StoreResource>) jdbcTemplate.query(query,parameters,new BeanPropertyRowMapper<>(StoreResource.class));
